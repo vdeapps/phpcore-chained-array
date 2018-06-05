@@ -1,5 +1,5 @@
 {
-    "name": "vdeapps/phpcoreChainedArray",
+    "name": "vdeapps/phpcore-chained-array",
     "type": "library",
     "description": "easy array manager",
     "keywords": [
@@ -7,19 +7,19 @@
         "library",
         "array"
     ],
-    "homepage": "https://github.com/vdeapps/phpcoreChainedArray",
+    "homepage": "https://github.com/vdeapps/phpcore-chained-array",
     "license": "MIT",
     "authors": [
         {
             "name": "vdeApps",
             "email": "vdeapps@riseup.net",
-            "homepage": "https://github.com/vdeapps/phpcoreChainedArray",
+            "homepage": "https://github.com/vdeapps/phpcore-chained-array",
             "role": "Developer"
         }
     ],
     "support": {
         "email": "vdeapps@riseup.net",
-        "issues": "https://github.com/vdeapps/phpcoreChainedArray/issues"
+        "issues": "https://github.com/vdeapps/phpcore-chained-array/issues"
     },
     "config": {
         "platform": {
