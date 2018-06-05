@@ -1,0 +1,210 @@
+<?php
+/**
+ * Copyright vdeapps 2018
+ */
+
+namespace vdeApps\phpCore;
+
+class chainedArray implements \Iterator{
+    
+    private $array = [];
+    
+    
+    /**
+     * return data storage
+     * @return array
+     */
+    public function getData(){
+        return $this->array;
+    }
+    
+    /**
+     * return array
+     * @return array
+     */
+    public function toArray() {
+        
+        $result = $this->array;
+        
+        foreach ($result as $key => $val){
+            
+            /** @var self $val */
+            if (is_a($val, self::class)){
+                $result[$key]=$val->toArray();
+            }
+            else{
+                $result[$key]=$val;
+            }
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * Initialize object
+     * @param chainedArray | array $array
+     */
+    public function setArray($array) {
+        if (is_a($array, self::class)){
+            $this->array = $array->getData();
+        }
+        else {
+            $this->array = $array;
+        }
+    }
+    
+    /**
+     * chainedArray constructor.
+     *
+     * @param chainedArray | array $arr
+     */
+    public function __construct($arr=[]) {
+        $this->setArray($arr);
+    }
+    
+    /**
+     * Instance of
+     * @param chainedArray | array $arr
+     *
+     * @return chainedArray
+     */
+    public static function getInstance($arr=[])
+    {
+        return new self($arr);
+        
+    }
+    
+    /**
+     * Return array result
+     * @return array
+     */
+    public function __invoke() {
+        return $this->toArray();
+    }
+    
+    /**
+     * set name / value
+     * @param $name
+     * @param $value
+     *
+     * @return $this
+     */
+    public function set($name, $value){
+        $this->__set($name,$value);
+        return $this;
+    }
+    
+    /**
+     * @param $name
+     * @param $value
+     */
+    public function __set($name, $value) {
+        
+        //        $this->array[$name] = (is_array($value) ) ? self::getInstance($value) :  $value;
+        $this->array[$name] = $value;
+    }
+    
+    /**
+     * @param $name
+     *
+     * @return mixed
+     */
+    public function __get($name) {
+        if (array_key_exists($name, $this->array)){
+            return $this->array[$name];
+        }
+        else{
+            $this->array[$name] = new self();
+            return $this->array[$name];
+        }
+    }
+    
+    /**
+     * @param $name
+     *
+     * @return $this
+     */
+    public function __unset($name) {
+        unset($this->array[$name]);
+        return $this;
+    }
+    
+    /**
+     * Return false if value is NULL
+     * @param $name
+     *
+     * @return bool
+     */
+    public function __isset($name) {
+        if ( is_null($this->array[$name]) ){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+    
+    /**
+     * Return the current element
+     * @link  http://php.net/manual/en/iterator.current.php
+     * @return mixed Can return any type.
+     * @since 5.0.0
+     */
+    public function current() {
+        return current($this->array);
+    }
+    
+    /**
+     * Move forward to next element
+     * @link  http://php.net/manual/en/iterator.next.php
+     * @return void Any returned value is ignored.
+     * @since 5.0.0
+     */
+    public function next() {
+        return next($this->array);
+    }
+    
+    /**
+     * Return the key of the current element
+     * @link  http://php.net/manual/en/iterator.key.php
+     * @return mixed scalar on success, or null on failure.
+     * @since 5.0.0
+     */
+    public function key() {
+        return  key($this->array);
+    }
+    
+    /**
+     * Checks if current position is valid
+     * @link  http://php.net/manual/en/iterator.valid.php
+     * @return boolean The return value will be casted to boolean and then evaluated.
+     * Returns true on success or false on failure.
+     * @since 5.0.0
+     */
+    public function valid() {
+        $key = key($this->array);
+        $var = ($key !== null && $key !== false);
+        return $var;
+    }
+    
+    /**
+     * Rewind the Iterator to the first element
+     * @link  http://php.net/manual/en/iterator.rewind.php
+     * @return void Any returned value is ignored.
+     * @since 5.0.0
+     */
+    public function rewind() {
+        reset($this->array);
+    }
+    
+    /**
+     * Append array to element
+     * @param $arr
+     *
+     * @return $this
+     */
+    public function append($arr=[]){
+        $this->array [] = $arr;
+        return $this;
+    }
+}
