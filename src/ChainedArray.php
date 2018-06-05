@@ -1,12 +1,7 @@
 <?php
 /**
- * Copyright vdeapps 2018
- *
- * @author   vdeApps
- * @category Library
- * @license  Apache License 2.0
+ * Copyright (c) vdeApps 2018
  */
-
 
 namespace vdeApps\phpCore;
 
