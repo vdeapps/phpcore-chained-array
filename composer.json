@@ -36,7 +36,7 @@
     },
     "autoload": {
         "psr-4": {
-            "vdeApps\\phpcore\\": "src/"
+            "vdeApps\\phpCore\\": "src/"
         }
     },
     "autoload-dev": {
