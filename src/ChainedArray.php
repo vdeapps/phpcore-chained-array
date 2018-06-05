@@ -8,28 +8,35 @@ namespace vdeApps\phpCore;
 class ChainedArray implements \Iterator {
     
     private $array = [];
-    
+
     /**
      * chainedArray constructor.
      *
      * @param chainedArray | array $arr
+     * @throws \Exception
      */
     public function __construct($arr = []) {
         $this->setArray($arr);
     }
-    
+
     /**
      * Initialize object
      *
      * @param chainedArray | array $array
+     * @return ChainedArray
+     * @throws \Exception
      */
     public function setArray($array) {
         if (is_a($array, self::class)) {
             $this->array = $array->getData();
         }
-        else {
+        elseif (is_array($array)){
             $this->array = $array;
         }
+        else {
+            throw new \Exception("Not an array or ChainedArray", 5);
+        }
+        return $this;
     }
     
     /**
@@ -40,13 +47,14 @@ class ChainedArray implements \Iterator {
     public function getData() {
         return $this->array;
     }
-    
+
     /**
      * Instance of
      *
      * @param chainedArray | array $arr
      *
      * @return chainedArray
+     * @throws \Exception
      */
     public static function getInstance($arr = []) {
         return new self($arr);
@@ -99,11 +107,12 @@ class ChainedArray implements \Iterator {
         
         return $this;
     }
-    
+
     /**
      * @param $name
      *
      * @return mixed
+     * @throws \Exception
      */
     public function __get($name) {
         if (array_key_exists($name, $this->array)) {
