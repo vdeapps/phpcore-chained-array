@@ -1,43 +1,47 @@
 {
-	"name": "vdeapps/phpcore-chainedarray",
-	"type": "library",
-	"description": "easy array manager",
-	"keywords": ["vdeapps", "library", "array"],
-	"homepage": "https://github.com/vdeapps/phpcore-chainedarray",
-	"license": "MIT",
-	"authors": [
-		{
-			"name": "vdeApps",
-			"email": "vdeapps@riseup.net",
-			"homepage": "https://github.com/vdeapps/phpcore-chainedarray",
-			"role": "Developer"
-		}
-	],
-	"support": {
-		"email": "vdeapps@riseup.net",
-		"issues": "https://github.com/vdeapps/phpcore-chainedarray/issues"
-	},
-	"config" : {
-                "platform" : {
-                        "php" : "7.0.00"
-                }
-        },
-	"require": {
-		"php": ">=5.5.9"
-	},
-	"suggest": {
-	},
-	"autoload": {
-		"psr-4": {
-			"vdeApps\\phpCore\\": "src/"
-		}
-	},
-	"autoload-dev":{
-		"psr-4":{
-			"":"tests/"
-		}
-	},
-	"scripts": {
-		"cs-fix": "php-cs-fixer fix . --fixers=-psr0"
-	}
+    "name": "vdeapps/phpcore-chainedarray",
+    "type": "library",
+    "description": "easy array manager",
+    "keywords": [
+        "vdeapps",
+        "library",
+        "array"
+    ],
+    "homepage": "https://github.com/vdeapps/phpcore-chainedarray",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "vdeApps",
+            "email": "vdeapps@riseup.net",
+            "homepage": "https://github.com/vdeapps/phpcore-chainedarray",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "email": "vdeapps@riseup.net",
+        "issues": "https://github.com/vdeapps/phpcore-chainedarray/issues"
+    },
+    "config": {
+        "platform": {
+            "php": "7.0.00"
+        }
+    },
+    "require": {
+        "php": ">=5.5.9"
+    },
+    "suggest": {
+    },
+    "autoload": {
+        "psr-4": {
+            "vdeApps\\phpCore\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "": "tests/"
+        }
+    },
+    "scripts": {
+        "cs-fix": "php-cs-fixer fix . --fixers=-psr0"
+    }
 }
