@@ -228,4 +228,12 @@ class ChainedArray implements \Iterator {
         
         return $this;
     }
+    
+    /**
+     * Return Json format
+     * @return string
+     */
+    public function toJson(){
+        return json_encode($this->toArray());
+    }
 }
