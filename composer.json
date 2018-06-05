@@ -1,5 +1,5 @@
 {
-    "name": "vdeapps/phpcore-chainedarray",
+    "name": "vdeapps/phpcoreChainedArray",
     "type": "library",
     "description": "easy array manager",
     "keywords": [
@@ -7,19 +7,19 @@
         "library",
         "array"
     ],
-    "homepage": "https://github.com/vdeapps/phpcore-chainedarray",
+    "homepage": "https://github.com/vdeapps/phpcoreChainedArray",
     "license": "MIT",
     "authors": [
         {
             "name": "vdeApps",
             "email": "vdeapps@riseup.net",
-            "homepage": "https://github.com/vdeapps/phpcore-chainedarray",
+            "homepage": "https://github.com/vdeapps/phpcoreChainedArray",
             "role": "Developer"
         }
     ],
     "support": {
         "email": "vdeapps@riseup.net",
-        "issues": "https://github.com/vdeapps/phpcore-chainedarray/issues"
+        "issues": "https://github.com/vdeapps/phpcoreChainedArray/issues"
     },
     "config": {
         "platform": {
@@ -29,11 +29,14 @@
     "require": {
         "php": ">=5.5.9"
     },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "3.*"
+    },
     "suggest": {
     },
     "autoload": {
         "psr-4": {
-            "vdeApps\\phpCore\\": "src/"
+            "vdeApps\\phpcore\\": "src/"
         }
     },
     "autoload-dev": {
