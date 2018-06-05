@@ -1,51 +1,35 @@
 <?php
 /**
  * Copyright vdeapps 2018
+ *
+ * @author   vdeApps
+ * @category Library
+ * @license  Apache License 2.0
  */
+
 
 namespace vdeApps\phpCore;
 
-class chainedArray implements \Iterator{
+class ChainedArray implements \Iterator {
     
     private $array = [];
     
-    
     /**
-     * return data storage
-     * @return array
+     * chainedArray constructor.
+     *
+     * @param chainedArray | array $arr
      */
-    public function getData(){
-        return $this->array;
-    }
-    
-    /**
-     * return array
-     * @return array
-     */
-    public function toArray() {
-        
-        $result = $this->array;
-        
-        foreach ($result as $key => $val){
-            
-            /** @var self $val */
-            if (is_a($val, self::class)){
-                $result[$key]=$val->toArray();
-            }
-            else{
-                $result[$key]=$val;
-            }
-        }
-        
-        return $result;
+    public function __construct($arr = []) {
+        $this->setArray($arr);
     }
     
     /**
      * Initialize object
+     *
      * @param chainedArray | array $array
      */
     public function setArray($array) {
-        if (is_a($array, self::class)){
+        if (is_a($array, self::class)) {
             $this->array = $array->getData();
         }
         else {
@@ -54,28 +38,28 @@ class chainedArray implements \Iterator{
     }
     
     /**
-     * chainedArray constructor.
+     * return data storage
      *
-     * @param chainedArray | array $arr
+     * @return array
      */
-    public function __construct($arr=[]) {
-        $this->setArray($arr);
+    public function getData() {
+        return $this->array;
     }
     
     /**
      * Instance of
+     *
      * @param chainedArray | array $arr
      *
      * @return chainedArray
      */
-    public static function getInstance($arr=[])
-    {
+    public static function getInstance($arr = []) {
         return new self($arr);
-        
     }
     
     /**
      * Return array result
+     *
      * @return array
      */
     public function __invoke() {
@@ -83,15 +67,58 @@ class chainedArray implements \Iterator{
     }
     
     /**
+     * return array
+     *
+     * @return array
+     */
+    public function toArray() {
+        
+        $result = $this->array;
+        
+        foreach ($result as $key => $val) {
+            
+            /**
+             * @var self $val
+             */
+            if (is_a($val, self::class)) {
+                $result[$key] = $val->toArray();
+            }
+            else {
+                $result[$key] = $val;
+            }
+        }
+        
+        return $result;
+    }
+    
+    /**
      * set name / value
+     *
      * @param $name
      * @param $value
      *
      * @return $this
      */
-    public function set($name, $value){
-        $this->__set($name,$value);
+    public function set($name, $value) {
+        $this->__set($name, $value);
+        
         return $this;
+    }
+    
+    /**
+     * @param $name
+     *
+     * @return mixed
+     */
+    public function __get($name) {
+        if (array_key_exists($name, $this->array)) {
+            return $this->array[$name];
+        }
+        else {
+            $this->array[$name] = new self();
+            
+            return $this->array[$name];
+        }
     }
     
     /**
@@ -107,48 +134,36 @@ class chainedArray implements \Iterator{
     /**
      * @param $name
      *
-     * @return mixed
-     */
-    public function __get($name) {
-        if (array_key_exists($name, $this->array)){
-            return $this->array[$name];
-        }
-        else{
-            $this->array[$name] = new self();
-            return $this->array[$name];
-        }
-    }
-    
-    /**
-     * @param $name
-     *
      * @return $this
      */
     public function __unset($name) {
         unset($this->array[$name]);
+        
         return $this;
     }
     
     /**
      * Return false if value is NULL
+     *
      * @param $name
      *
      * @return bool
      */
     public function __isset($name) {
-        if ( is_null($this->array[$name]) ){
+        if (is_null($this->array[$name])) {
             return false;
         }
-        else{
+        else {
             return true;
         }
     }
     
     /**
      * Return the current element
-     * @link  http://php.net/manual/en/iterator.current.php
+     *
+     * @link   http://php.net/manual/en/iterator.current.php
      * @return mixed Can return any type.
-     * @since 5.0.0
+     * @since  5.0.0
      */
     public function current() {
         return current($this->array);
@@ -156,42 +171,46 @@ class chainedArray implements \Iterator{
     
     /**
      * Move forward to next element
-     * @link  http://php.net/manual/en/iterator.next.php
+     *
+     * @link   http://php.net/manual/en/iterator.next.php
      * @return void Any returned value is ignored.
-     * @since 5.0.0
+     * @since  5.0.0
      */
     public function next() {
-        return next($this->array);
+        next($this->array);
     }
     
     /**
      * Return the key of the current element
-     * @link  http://php.net/manual/en/iterator.key.php
+     *
+     * @link   http://php.net/manual/en/iterator.key.php
      * @return mixed scalar on success, or null on failure.
-     * @since 5.0.0
+     * @since  5.0.0
      */
     public function key() {
-        return  key($this->array);
+        return key($this->array);
     }
     
     /**
      * Checks if current position is valid
-     * @link  http://php.net/manual/en/iterator.valid.php
+     *
+     * @link   http://php.net/manual/en/iterator.valid.php
      * @return boolean The return value will be casted to boolean and then evaluated.
      * Returns true on success or false on failure.
-     * @since 5.0.0
+     * @since  5.0.0
      */
     public function valid() {
         $key = key($this->array);
-        $var = ($key !== null && $key !== false);
-        return $var;
+        
+        return ($key !== null && $key !== false);
     }
     
     /**
      * Rewind the Iterator to the first element
-     * @link  http://php.net/manual/en/iterator.rewind.php
+     *
+     * @link   http://php.net/manual/en/iterator.rewind.php
      * @return void Any returned value is ignored.
-     * @since 5.0.0
+     * @since  5.0.0
      */
     public function rewind() {
         reset($this->array);
@@ -199,12 +218,14 @@ class chainedArray implements \Iterator{
     
     /**
      * Append array to element
+     *
      * @param $arr
      *
      * @return $this
      */
-    public function append($arr=[]){
+    public function append($arr = []) {
         $this->array [] = $arr;
+        
         return $this;
     }
 }
