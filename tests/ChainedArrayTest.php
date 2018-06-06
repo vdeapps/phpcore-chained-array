@@ -106,10 +106,21 @@ class ChainedArrayTest extends TestCase {
 
     public function testReturn(){
         $o = ChainedArray::getInstance($this->arr2);
-
+    
         $this->assertEquals($this->arr2, $o->toArray());
-
+    
         $this->assertEquals($this->json2, $o->toJson());
+    
+    
+        // Ajout de sous-clés
+        $o->sub1->sub2->sub3 = 'sub3Data';
+    
+        $this->assertInternalType('array', $o->level1);
+    
+    
+        $this->assertInstanceOf(ChainedArray::class, $o->sub1->sub2);
+        
+        $this->assertEquals('sub3Data', $o->sub1->sub2->sub3);
     }
 
     public function testOperations(){

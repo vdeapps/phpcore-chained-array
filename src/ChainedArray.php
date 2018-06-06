@@ -107,6 +107,16 @@ class ChainedArray implements \Iterator {
         
         return $this;
     }
+    
+    /**
+     * Get data by name
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function get($name){
+        return $this->__get($name);
+    }
 
     /**
      * @param $name
