@@ -139,5 +139,20 @@ class ChainedArrayTest extends TestCase {
             ->append(['name'=>'vdeapps', 'line'=>6]);
 
         $this->assertEquals($o->toJson(), $this->jsonAppend);
+    
+        // count elements from level5
+        $this->assertEquals(3, count($o->get('level5')->toArray()));
+    
+        // clear elements from level5
+        $o->level5->clear();
+    
+        // count elements from level5
+        $this->assertEquals(0, count($o->get('level5')->toArray()));
+    
+        // clear all elements
+        $o->clear();
+        // count elements
+        $this->assertEquals(0, count($o->toArray()));
+    
     }
 }

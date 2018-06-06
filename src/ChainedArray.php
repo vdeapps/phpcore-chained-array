@@ -40,6 +40,14 @@ class ChainedArray implements \Iterator {
     }
     
     /**
+     * Clear all data
+     * @return ChainedArray
+     */
+    public function clear(){
+        return $this->setArray([]);
+    }
+    
+    /**
      * return data storage
      *
      * @return array
