@@ -2,7 +2,6 @@
 
 namespace Tests\vdeApps\phpCore;
 
-use PHP_CodeSniffer\Standards\Generic\Tests\Functions\CallTimePassByReferenceUnitTest;
 use PHPUnit\Framework\TestCase;
 use vdeApps\phpCore\ChainedArray;
 
