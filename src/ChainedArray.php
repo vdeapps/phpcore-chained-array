@@ -5,7 +5,8 @@
 
 namespace vdeApps\phpCore;
 
-class ChainedArray implements \Iterator {
+class ChainedArray implements \Iterator
+{
     
     private $array = [];
 
@@ -15,7 +16,8 @@ class ChainedArray implements \Iterator {
      * @param chainedArray | array $arr
      * @throws \Exception
      */
-    public function __construct($arr = []) {
+    public function __construct($arr = [])
+    {
         $this->setArray($arr);
     }
 
@@ -26,14 +28,13 @@ class ChainedArray implements \Iterator {
      * @return ChainedArray
      * @throws \Exception
      */
-    public function setArray($array) {
+    public function setArray($array)
+    {
         if (is_a($array, self::class)) {
             $this->array = $array->getData();
-        }
-        elseif (is_array($array)){
+        } elseif (is_array($array)) {
             $this->array = $array;
-        }
-        else {
+        } else {
             throw new \Exception("Not an array or ChainedArray", 5);
         }
         return $this;
@@ -43,7 +44,8 @@ class ChainedArray implements \Iterator {
      * Clear all data
      * @return ChainedArray
      */
-    public function clear(){
+    public function clear()
+    {
         return $this->setArray([]);
     }
     
@@ -52,7 +54,8 @@ class ChainedArray implements \Iterator {
      *
      * @return array
      */
-    public function getData() {
+    public function getData()
+    {
         return $this->array;
     }
 
@@ -64,7 +67,8 @@ class ChainedArray implements \Iterator {
      * @return chainedArray
      * @throws \Exception
      */
-    public static function getInstance($arr = []) {
+    public static function getInstance($arr = [])
+    {
         return new self($arr);
     }
     
@@ -73,7 +77,8 @@ class ChainedArray implements \Iterator {
      *
      * @return array
      */
-    public function __invoke() {
+    public function __invoke()
+    {
         return $this->toArray();
     }
     
@@ -82,7 +87,8 @@ class ChainedArray implements \Iterator {
      *
      * @return array
      */
-    public function toArray() {
+    public function toArray()
+    {
         
         $result = $this->array;
         
@@ -93,8 +99,7 @@ class ChainedArray implements \Iterator {
              */
             if (is_a($val, self::class)) {
                 $result[$key] = $val->toArray();
-            }
-            else {
+            } else {
                 $result[$key] = $val;
             }
         }
@@ -110,7 +115,8 @@ class ChainedArray implements \Iterator {
      *
      * @return $this
      */
-    public function set($name, $value) {
+    public function set($name, $value)
+    {
         $this->__set($name, $value);
         
         return $this;
@@ -122,7 +128,8 @@ class ChainedArray implements \Iterator {
      *
      * @return mixed
      */
-    public function get($name){
+    public function get($name)
+    {
         return $this->__get($name);
     }
 
@@ -132,11 +139,15 @@ class ChainedArray implements \Iterator {
      * @return mixed
      * @throws \Exception
      */
-    public function __get($name) {
+    public function __get($name)
+    {
         if (array_key_exists($name, $this->array)) {
-            return $this->array[$name];
-        }
-        else {
+            if (is_array($this->array[$name])) {
+                return self::getInstance($this->array[$name]);
+            } else {
+                return $this->array[$name];
+            }
+        } else {
             $this->array[$name] = new self();
             
             return $this->array[$name];
@@ -147,7 +158,8 @@ class ChainedArray implements \Iterator {
      * @param $name
      * @param $value
      */
-    public function __set($name, $value) {
+    public function __set($name, $value)
+    {
         
         //        $this->array[$name] = (is_array($value) ) ? self::getInstance($value) :  $value;
         $this->array[$name] = $value;
@@ -158,7 +170,8 @@ class ChainedArray implements \Iterator {
      *
      * @return $this
      */
-    public function __unset($name) {
+    public function __unset($name)
+    {
         unset($this->array[$name]);
         
         return $this;
@@ -171,11 +184,11 @@ class ChainedArray implements \Iterator {
      *
      * @return bool
      */
-    public function __isset($name) {
+    public function __isset($name)
+    {
         if (is_null($this->array[$name])) {
             return false;
-        }
-        else {
+        } else {
             return true;
         }
     }
@@ -187,7 +200,8 @@ class ChainedArray implements \Iterator {
      * @return mixed Can return any type.
      * @since  5.0.0
      */
-    public function current() {
+    public function current()
+    {
         return current($this->array);
     }
     
@@ -198,7 +212,8 @@ class ChainedArray implements \Iterator {
      * @return void Any returned value is ignored.
      * @since  5.0.0
      */
-    public function next() {
+    public function next()
+    {
         next($this->array);
     }
     
@@ -209,7 +224,8 @@ class ChainedArray implements \Iterator {
      * @return mixed scalar on success, or null on failure.
      * @since  5.0.0
      */
-    public function key() {
+    public function key()
+    {
         return key($this->array);
     }
     
@@ -221,7 +237,8 @@ class ChainedArray implements \Iterator {
      * Returns true on success or false on failure.
      * @since  5.0.0
      */
-    public function valid() {
+    public function valid()
+    {
         $key = key($this->array);
         
         return ($key !== null && $key !== false);
@@ -234,7 +251,8 @@ class ChainedArray implements \Iterator {
      * @return void Any returned value is ignored.
      * @since  5.0.0
      */
-    public function rewind() {
+    public function rewind()
+    {
         reset($this->array);
     }
     
@@ -245,7 +263,8 @@ class ChainedArray implements \Iterator {
      *
      * @return $this
      */
-    public function append($arr = []) {
+    public function append($arr = [])
+    {
         $this->array [] = $arr;
         
         return $this;
@@ -255,7 +274,8 @@ class ChainedArray implements \Iterator {
      * Return Json format
      * @return string
      */
-    public function toJson(){
+    public function toJson()
+    {
         return json_encode($this->toArray());
     }
 }
