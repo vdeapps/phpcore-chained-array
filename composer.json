@@ -45,6 +45,7 @@
         }
     },
     "scripts": {
+        "test" : "phpunit70",
         "cs-fix": "php-cs-fixer fix . --fixers=-psr0"
     }
 }
