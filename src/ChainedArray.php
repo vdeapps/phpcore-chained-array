@@ -9,22 +9,24 @@ class ChainedArray implements \Iterator
 {
     
     private $array = [];
-
+    
     /**
      * chainedArray constructor.
      *
      * @param chainedArray | array $arr
+     *
      * @throws \Exception
      */
     public function __construct($arr = [])
     {
         $this->setArray($arr);
     }
-
+    
     /**
      * Initialize object
      *
      * @param chainedArray | array $array
+     *
      * @return ChainedArray
      * @throws \Exception
      */
@@ -37,16 +39,8 @@ class ChainedArray implements \Iterator
         } else {
             throw new \Exception("Not an array or ChainedArray", 5);
         }
+        
         return $this;
-    }
-    
-    /**
-     * Clear all data
-     * @return ChainedArray
-     */
-    public function clear()
-    {
-        return $this->setArray([]);
     }
     
     /**
@@ -58,18 +52,42 @@ class ChainedArray implements \Iterator
     {
         return $this->array;
     }
-
+    
     /**
-     * Instance of
+     * Return value of array
      *
-     * @param chainedArray | array $arr
+     * @param array $data
+     * @param string     $key          key of array
+     * @param mixed      $defaultvalue value if not found
      *
-     * @return chainedArray
-     * @throws \Exception
+     * @return mixed
      */
-    public static function getInstance($arr = [])
+    public static function getValue($data, $key, $defaultvalue = false)
     {
-        return new self($arr);
+//        if (is_a($data, ChainedArray::class)) {
+//            $result = $data->get($key);
+//
+//            if (is_a($result, ChainedArray::class)) {
+//                /** ChainedArray $result */
+//                return ($result->count()==0) ? $defaultvalue : $result;
+//            } else {
+//                return $result;
+//            }
+//        } else
+            if (is_array($data)) {
+            return (array_key_exists($key, $data)) ? $data[$key] : $defaultvalue;
+        } else {
+            return $defaultvalue;
+        }
+    }
+    
+    /**
+     * Clear all data
+     * @return ChainedArray
+     */
+    public function clear()
+    {
+        return $this->setArray([]);
     }
     
     /**
@@ -124,6 +142,7 @@ class ChainedArray implements \Iterator
     
     /**
      * Get data by name
+     *
      * @param string $name
      *
      * @return mixed
@@ -132,7 +151,7 @@ class ChainedArray implements \Iterator
     {
         return $this->__get($name);
     }
-
+    
     /**
      * @param $name
      *
@@ -163,6 +182,28 @@ class ChainedArray implements \Iterator
         
         //        $this->array[$name] = (is_array($value) ) ? self::getInstance($value) :  $value;
         $this->array[$name] = $value;
+    }
+    
+    /**
+     * Instance of
+     *
+     * @param chainedArray | array $arr
+     *
+     * @return chainedArray
+     * @throws \Exception
+     */
+    public static function getInstance($arr = [])
+    {
+        return new self($arr);
+    }
+    
+    /**
+     * Number of elements
+     * @return int
+     */
+    public function count()
+    {
+        return count($this->array);
     }
     
     /**

@@ -4,6 +4,7 @@ namespace Tests\vdeApps\phpCore;
 
 use PHPUnit\Framework\TestCase;
 use vdeApps\phpCore\ChainedArray;
+use vdeApps\phpCore\Helper;
 
 class CTest
 {
@@ -206,5 +207,27 @@ class ChainedArrayTest extends TestCase
         $o->clear();
         // count elements
         $this->assertEquals(0, count($o->toArray()));
+    }
+    
+    public function testFind(){
+    
+        $o = ChainedArray::getInstance($this->arr2SetValues);
+    
+        $res = ChainedArray::find($o, 'newElement', 'foo');
+        $this->assertEquals($this->arr2SetValues['newElement'], $res->toArray());
+    
+        $res = ChainedArray::find($o, 'badkey', 'foo');
+        $this->assertEquals('foo', $res);
+    
+        $res = ChainedArray::find($o, 'badkey');
+        $this->assertEquals(false, $res);
+    
+    
+        $res = ChainedArray::find($this->arr2SetValues, 'newElement');
+        $this->assertEquals($this->arr2SetValues['newElement'], $res);
+    
+        $res = ChainedArray::find($this->arr2SetValues, 'badKey', 'notfound');
+        $this->assertEquals('notfound', $res);
+        
     }
 }
