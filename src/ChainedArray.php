@@ -23,6 +23,119 @@ class ChainedArray implements \Iterator
     }
     
     /**
+     * Return value of array
+     *
+     * @param array  $data
+     * @param string $key          key of array
+     * @param mixed  $defaultvalue value if not found
+     *
+     * @return mixed
+     */
+    public static function getValue($data, $key, $defaultvalue = false)
+    {
+        //        if (is_a($data, ChainedArray::class)) {
+        //            $result = $data->get($key);
+        //
+        //            if (is_a($result, ChainedArray::class)) {
+        //                /** ChainedArray $result */
+        //                return ($result->count()==0) ? $defaultvalue : $result;
+        //            } else {
+        //                return $result;
+        //            }
+        //        } else
+        if (is_array($data)) {
+            return (array_key_exists($key, $data)) ? $data[$key] : $defaultvalue;
+        } else {
+            return $defaultvalue;
+        }
+    }
+    
+    /**
+     * Instance of
+     *
+     * @param chainedArray | array $arr
+     *
+     * @return chainedArray
+     * @throws \Exception
+     */
+    public static function getInstance($arr = [])
+    {
+        return new self($arr);
+    }
+    
+    /**
+     * Compare 2 array and return result of IN/NOTIN
+     *
+     * @param        mixed      ,array  $arr1 La variable sera transformée en tableau
+     * @param        mixed      ,array  $arr2 La variable sera transformée en tableau
+     * @param string $operateur IN, NOTIN
+     *
+     * @return array|bool   Tableau des valeurs (IN ou NOTIN) ou FALSE
+     */
+    public static function compareValues($arr1 = [], $arr2 = [], $operateur = 'IN')
+    {
+        $result = [];
+        
+        if (!is_array($arr1)) {
+            $arr1 = [$arr1];
+        }
+        if (!is_array($arr2)) {
+            $arr2 = [$arr2];
+        }
+        
+        if (!is_array($arr1) || !is_array($arr2)) {
+            return false;
+        }
+        
+        switch (strtoupper($operateur)) {
+            case 'IN':
+                $result = array_intersect($arr1, $arr2);
+                break;
+            
+            case 'NOTIN':
+                $result = array_diff($arr1, $arr2);
+                break;
+            
+            default:
+                $result = false;
+                break;
+        }
+        
+        return ($result && count($result) != 0) ? $result : false;
+    }
+    
+    /**
+     * Tri d'un tableau associatif
+     *
+     * @param     $arr
+     * @param     $key
+     * @param int $type
+     *
+     * @return mixed
+     */
+    public static function assocSort(&$arr, $key, $type = SORT_STRING)
+    {
+        
+        $ret = usort($arr, function ($a, $b) use ($key, $type)
+        {
+            switch ($type) {
+                case SORT_STRING:
+                    return strcasecmp($a[$key], $b[$key]);
+                    break;
+                
+                case SORT_NUMERIC:
+                    return $a[$key] > $b[$key];
+                    break;
+                
+                default:
+                    return 0;
+            }
+        });
+        
+        return $ret;
+    }
+    
+    /**
      * Initialize object
      *
      * @param chainedArray | array $array
@@ -51,34 +164,6 @@ class ChainedArray implements \Iterator
     public function getData()
     {
         return $this->array;
-    }
-    
-    /**
-     * Return value of array
-     *
-     * @param array $data
-     * @param string     $key          key of array
-     * @param mixed      $defaultvalue value if not found
-     *
-     * @return mixed
-     */
-    public static function getValue($data, $key, $defaultvalue = false)
-    {
-//        if (is_a($data, ChainedArray::class)) {
-//            $result = $data->get($key);
-//
-//            if (is_a($result, ChainedArray::class)) {
-//                /** ChainedArray $result */
-//                return ($result->count()==0) ? $defaultvalue : $result;
-//            } else {
-//                return $result;
-//            }
-//        } else
-            if (is_array($data)) {
-            return (array_key_exists($key, $data)) ? $data[$key] : $defaultvalue;
-        } else {
-            return $defaultvalue;
-        }
     }
     
     /**
@@ -182,19 +267,6 @@ class ChainedArray implements \Iterator
         
         //        $this->array[$name] = (is_array($value) ) ? self::getInstance($value) :  $value;
         $this->array[$name] = $value;
-    }
-    
-    /**
-     * Instance of
-     *
-     * @param chainedArray | array $arr
-     *
-     * @return chainedArray
-     * @throws \Exception
-     */
-    public static function getInstance($arr = [])
-    {
-        return new self($arr);
     }
     
     /**

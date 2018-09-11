@@ -13,8 +13,6 @@
     <arg value="p"/>
 
     <file>src</file>
-    <exclude-pattern>*/src/views/*</exclude-pattern>
-    <exclude-pattern>*/src/assets/*</exclude-pattern>
 
     <!-- Warn about lines longer than 135 chars, and never error. -->
     <rule ref="Generic.Files.LineLength">

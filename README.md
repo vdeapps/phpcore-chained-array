@@ -1,3 +1,4 @@
 # phpcore-chained-array
 Easy array manager.
-Export data to json format.
+Export data to json format or array.
+

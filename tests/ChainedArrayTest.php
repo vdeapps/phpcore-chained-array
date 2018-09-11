@@ -6,19 +6,16 @@ use PHPUnit\Framework\TestCase;
 use vdeApps\phpCore\ChainedArray;
 use vdeApps\phpCore\Helper;
 
-class CTest
-{
+class CTest {
     
     protected $var1 = 'var1';
     
-    public function fct1()
-    {
+    public function fct1() {
         return $this->var1;
     }
 }
 
-class ChainedArrayTest extends TestCase
-{
+class ChainedArrayTest extends TestCase {
     
     protected $arr1 = [
         'level1' => 'strLevel1',
@@ -62,9 +59,37 @@ class ChainedArrayTest extends TestCase
     
     protected $jsonAppend = '{"level1":{"level2":"strLevel2"},"level3":"strLevel3","level5":[{"name":"vdeapps","line":2},{"name":"vdeapps","line":4},{"name":"vdeapps","line":6}]}';
     
+    protected $arrToSort = [
+        [
+            'prenom' => 'vincent',
+            'nom'    => 'test',
+        ],
+        [
+            'prenom' => 'Romain',
+            'nom'    => 'test',
+        ],
+        [
+            'prenom' => 'Eloise',
+            'nom'    => 'test',
+        ],
+    ];
     
-    public function testConstruct()
-    {
+    protected $arrSorted = [
+        [
+            'prenom' => 'Eloise',
+            'nom'    => 'test',
+        ],
+        [
+            'prenom' => 'Romain',
+            'nom'    => 'test',
+        ],
+        [
+            'prenom' => 'vincent',
+            'nom'    => 'test',
+        ],
+    ];
+    
+    public function testConstruct() {
         
         $this->assertInstanceOf(
             ChainedArray::class,
@@ -86,18 +111,19 @@ class ChainedArrayTest extends TestCase
                 Exception::class,
                 ChainedArray::getInstance("NotAnArray")
             );
-        } catch (\Exception $ex) {
+        }
+        catch (\Exception $ex) {
             $this->assertEquals($ex->getCode(), 5);
         }
     }
     
-    public function testCreate()
-    {
+    public function testCreate() {
         
         $o = ChainedArray::getInstance();
         try {
             $o->setArray("ezrezr");
-        } catch (\Exception $ex) {
+        }
+        catch (\Exception $ex) {
             $this->assertEquals($ex->getCode(), 5);
         }
         
@@ -123,8 +149,7 @@ class ChainedArrayTest extends TestCase
         $this->assertInstanceOf(CTest::class, $o->myObject);
     }
     
-    public function testReturn()
-    {
+    public function testReturn() {
         $o = ChainedArray::getInstance($this->arr2SetValues);
         $o->newSubElement
             ->set('val1', 1)
@@ -134,29 +159,29 @@ class ChainedArrayTest extends TestCase
         
         $resultArray = [
             'level1' =>
-            [
-                'level2' => 'strLevel2',
-            ],
+                [
+                    'level2' => 'strLevel2',
+                ],
             
             'level3'     => 'strLevel3',
             'newElement' =>
-            [
-                'val1' => 1,
-                'val2' => 2,
-                'val3' => 3,
-                'val4' => 4,
-            ],
+                [
+                    'val1' => 1,
+                    'val2' => 2,
+                    'val3' => 3,
+                    'val4' => 4,
+                ],
             
             'newSubElement' =>
-            [
-                'val1' => 1,
-                'val2' => 2,
-                'val3' => 3,
-                'val4' => 4,
-            ],
+                [
+                    'val1' => 1,
+                    'val2' => 2,
+                    'val3' => 3,
+                    'val4' => 4,
+                ],
         
         ];
-
+        
         
         $this->assertEquals($resultArray, $o->toArray());
         
@@ -176,8 +201,7 @@ class ChainedArrayTest extends TestCase
         $this->assertEquals('sub3Data', $o->sub1->sub2->sub3);
     }
     
-    public function testOperations()
-    {
+    public function testOperations() {
         $o = ChainedArray::getInstance($this->arr2);
         $o->addLevel = 'strAddLevel';
         $this->assertEquals($this->arrAddLevel, $o->toArray());
@@ -209,25 +233,52 @@ class ChainedArrayTest extends TestCase
         $this->assertEquals(0, count($o->toArray()));
     }
     
-    public function testFind(){
-    
+    public function testFind() {
+        
         $o = ChainedArray::getInstance($this->arr2SetValues);
-    
-        $res = ChainedArray::find($o, 'newElement', 'foo');
-        $this->assertEquals($this->arr2SetValues['newElement'], $res->toArray());
-    
-        $res = ChainedArray::find($o, 'badkey', 'foo');
-        $this->assertEquals('foo', $res);
-    
-        $res = ChainedArray::find($o, 'badkey');
-        $this->assertEquals(false, $res);
-    
-    
-        $res = ChainedArray::find($this->arr2SetValues, 'newElement');
+        
+        $res = ChainedArray::getValue($o->toArray(), 'newElement', 'foo');
         $this->assertEquals($this->arr2SetValues['newElement'], $res);
-    
-        $res = ChainedArray::find($this->arr2SetValues, 'badKey', 'notfound');
+        
+        $res = ChainedArray::getValue($o->toArray(), 'badkey', 'foo');
+        $this->assertEquals('foo', $res);
+        
+        $res = ChainedArray::getValue($o->toArray(), 'badkey');
+        $this->assertEquals(false, $res);
+        
+        
+        $res = ChainedArray::getValue($this->arr2SetValues, 'newElement');
+        $this->assertEquals($this->arr2SetValues['newElement'], $res);
+        
+        $res = ChainedArray::getValue($this->arr2SetValues, 'badKey', 'notfound');
         $this->assertEquals('notfound', $res);
         
+    }
+    
+    
+    public function testCompareValues() {
+        
+        $tb1 = ['A', 'B', 'C', 'D', 'E'];
+        
+        $tbIN = ['B', 'D'];
+        
+        $tbNOTIN = ['B', 'D'];
+        
+        $res = ChainedArray::compareValues($tb1, $tb1);
+        
+        $this->assertEquals($tb1, $res);
+        //        print_r($res);
+        
+    }
+    
+    public function testSortValues() {
+        
+        $arrToSort = $this->arrToSort;
+        
+        $ret = ChainedArray::assocSort($arrToSort, 'prenom', SORT_STRING);
+        
+        $this->assertEquals($ret, true);
+        
+        $this->assertEquals($arrToSort, $this->arrSorted);
     }
 }
